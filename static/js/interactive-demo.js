@@ -318,7 +318,7 @@ function renderSceneGraphPanel1(sceneGraph) {
   const chartContainer = document.createElement("div");
   chartContainer.style.width = "100%";
   chartContainer.style.height = "100%";
-  chartContainer.style.minHeight = "500px";
+  chartContainer.style.minHeight = "700px"; // Increased to create more height between levels
   container.appendChild(chartContainer);
 
   const roomNames = Array.from(roomsByName.keys()).sort();

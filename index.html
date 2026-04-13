@@ -67,7 +67,6 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
 
-  <!-- TODO: Replace with your paper title and authors -->
   <title>Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks - zhihong liu, yang li, renming huang, cewu lu, panpan cai | Academic Research</title>
   
   <!-- Favicon and App Icons -->
@@ -222,10 +221,8 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <!-- TODO: Replace with your paper title -->
             <h1 class="title is-1 publication-title">Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks</h1>
             <div class="is-size-5 publication-authors">
-              <!-- TODO: Replace with your paper authors and their personal links -->
               <span class="author-block">
                 <a href="https://roboticsjtu.github.io/Group_website/author/zhihong-liu/" target="_blank">Zhihong Liu</a>,</span>
                 <span class="author-block">
@@ -240,7 +237,6 @@
 
                   <div class="column has-text-centered">
                     <div class="publication-links">
-                         <!-- TODO: Update with your arXiv paper ID -->
                       <span class="link-block">
                         <a href="https://arxiv.org/pdf/2602.12244" target="_blank"
                         class="external-link button is-normal is-rounded is-dark">
@@ -251,7 +247,6 @@
                       </a>
                     </span>
 
-                    <!-- TODO: Add your supplementary material PDF or remove this section -->
                     <!-- <span class="link-block">
                       <a href="static/pdfs/supplementary_material.pdf" target="_blank"
                       class="external-link button is-normal is-rounded is-dark">
@@ -262,7 +257,6 @@
                     </a>
                   </span> -->
 
-                  <!-- TODO: Replace with your GitHub repository URL -->
                   <span class="link-block">
                     <a href="https://github.com/Sii-liuzhihong/AHAT" target="_blank"
                     class="external-link button is-normal is-rounded is-dark">
@@ -273,7 +267,6 @@
                   </a>
                 </span>
 
-                <!-- TODO: Update with your arXiv paper ID -->
                 <span class="link-block">
                   <a href="https://arxiv.org/abs/2602.12244" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
@@ -467,7 +460,6 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <!-- TODO: Replace with your paper abstract -->
           <p>
             Open-world language-conditioned task planning is crucial for robots operating in large-scale household environments. While many recent works attempt to address this problem using Large Language Models (LLMs) via prompting or training, a key challenge remains: <em>scalability</em>. Performance often degrades rapidly with increasing environment size, plan length, instruction ambiguity, and constraint complexity. In this work, we propose Any House Any Task (AHAT), a household task planner optimized for long-horizon planning in large environments given abstract human instructions. At its core, AHAT utilizes an LLM trained to map task instructions and textual scene graphs into grounded subgoals defined in the Planning Domain Definition Language (PDDL). These subgoals are subsequently solved to generate feasible and optimal long-horizon plans through explicit symbolic reasoning. To enhance the model's ability to decompose complex and ambiguous intentions, we introduce TGPO, a novel reinforcement learning algorithm that integrates external correction of intermediate reasoning trace into Group Relative Policy Optimization (GRPO). Experiments demonstrate that AHAT achieves significant performance gains over state-of-the-art prompting, planning, and learning methods, particularly in human-style household tasks characterized by brief instructions but requiring complex execution plans.
           </p>
@@ -589,7 +581,7 @@
             <figure class="image">
               <img src="static/images/ahat_ablation.png" alt="Ablation study results" loading="lazy" style="max-width: 100%; height: auto;"/>
               <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
-                Table 3: Ablation study results showing the contribution of AHAT.
+                Figure 3: Ablation study results showing the contribution of AHAT.
               </figcaption>
             </figure>
           </div>
@@ -597,7 +589,7 @@
             <figure class="image">
               <img src="static/images/tgpo_ablation.png" alt="Ablation study results" loading="lazy" style="max-width: 100%; height: auto;"/>
               <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
-                Table 4: Ablation study results showing the contribution of TGPO.
+                Figure 4: Ablation study results showing the contribution of TGPO.
               </figcaption>
             </figure>
           </div>
@@ -612,13 +604,48 @@
           We systematically evaluate scalability across four dimensions: environment size, plan length, instruction abstraction, and task constraint complexity. As each dimension increases, we observe that AHAT maintains relatively stable performance, with only marginal degradation. In contrast, baseline methods exhibit significant performance drops as scalability increases. These results demonstrate AHAT’s robustness and effectiveness in handling large-scale environments, long-horizon planning, highly abstract instructions, and complex constraints.
         </p>
         
-        <!-- TODO: Replace with your scalability analysis images -->
-        <div class="columns is-centered">
-          <div class="column">
-            <figure class="image">
-              <img src="static/images/scalability_results.png" alt="Scalability analysis" loading="lazy" style="max-width: 70%; height: auto;"/>
-              <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
-                Figure5: Scalability analysis across different environment sizes, plan length, task abstraction and constraint complexity.
+        <div class="scalability-controls has-text-centered" role="tablist" aria-label="Scalability dimensions">
+          <button class="button is-light scalability-tab is-active" data-scalability-key="scene_graph_size" type="button" role="tab" aria-selected="true">
+            Scene Graph Size
+          </button>
+          <button class="button is-light scalability-tab" data-scalability-key="plan_length" type="button" role="tab" aria-selected="false">
+            Plan Length
+          </button>
+          <button class="button is-light scalability-tab" data-scalability-key="task_abstraction" type="button" role="tab" aria-selected="false">
+            Task Abstraction
+          </button>
+          <button class="button is-light scalability-tab" data-scalability-key="constraint_complexity" type="button" role="tab" aria-selected="false">
+            Constraint Complexity
+          </button>
+        </div>
+
+        <div class="scalability-legend-wrap">
+          <div class="scalability-legend" aria-label="Methods legend">
+            <span class="scalability-legend-item">
+              <span class="scalability-legend-swatch" style="background-color: #E15759;"></span>
+              <span>AHAT</span>
+            </span>
+            <span class="scalability-legend-item">
+              <span class="scalability-legend-swatch" style="background-color: #4E79A7;"></span>
+              <span>E2E-TGPO</span>
+            </span>
+            <span class="scalability-legend-item">
+              <span class="scalability-legend-swatch" style="background-color: #F28E2B;"></span>
+              <span>SayPlan</span>
+            </span>
+            <span class="scalability-legend-item">
+              <span class="scalability-legend-swatch" style="background-color: #76B7B2;"></span>
+              <span>GPT-5</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="columns is-centered scalability-image-row">
+          <div class="column scalability-image-column">
+            <figure class="image scalability-figure">
+              <img id="scalability-image" src="static/images/ablation_scene_graph_size.png" alt="Scalability analysis for scene graph size" loading="lazy"/>
+              <figcaption id="scalability-caption" class="has-text-centered">
+                Scalability analysis under increasing scene graph size.
               </figcaption>
             </figure>
           </div>
