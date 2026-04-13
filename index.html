@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks">
+  <meta name="description" content="Open-world language-conditioned task planning is crucial for robots operating in large-scale household environments. While many recent works attempt to address this problem using Large Language Models (LLMs) via prompting or training, a key challenge remains: scalability. Performance often degrades rapidly with increasing environment size, plan length, instruction ambiguity, and constraint complexity. In this work, we propose Any House Any Task (AHAT), a household task planner optimized for long-horizon planning in large environments given abstract human instructions. At its core, AHAT utilizes an LLM trained to map task instructions and textual scene graphs into grounded subgoals defined in the Planning Domain Definition Language (PDDL). These subgoals are subsequently solved to generate feasible and optimal long-horizon plans through explicit symbolic reasoning. To enhance the model's ability to decompose complex and ambiguous intentions, we introduce TGPO, a novel reinforcement learning algorithm that integrates external correction of intermediate reasoning trace into Group Relative Policy Optimization (GRPO). Experiments demonstrate that AHAT achieves significant performance gains over state-of-the-art prompting, planning, and learning methods, particularly in human-style household tasks characterized by brief instructions but requiring complex execution plans.">
+  <meta name="keywords" content="planning, robotics, artificial intelligence, machine learning, long-horizon planning, LLMs, reinforcement learning, symbolic reasoning, PDDL, task decomposition">
+  <meta name="author" content="zhihong liu, yang li, renming huang, cewu lu, panpan cai">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <!-- TODO: Replace with your institution or lab name -->
+  <meta property="og:site_name" content="INSTITUTION_OR_LAB_NAME">
+  <meta property="og:title" content="Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks">
+  <meta property="og:description" content="Open-world language-conditioned task planning is crucial for robots operating in large-scale household environments. While many recent works attempt to address this problem using Large Language Models (LLMs) via prompting or training, a key challenge remains: scalability. Performance often degrades rapidly with increasing environment size, plan length, instruction ambiguity, and constraint complexity. In this work, we propose Any House Any Task (AHAT), a household task planner optimized for long-horizon planning in large environments given abstract human instructions. At its core, AHAT utilizes an LLM trained to map task instructions and textual scene graphs into grounded subgoals defined in the Planning Domain Definition Language (PDDL). These subgoals are subsequently solved to generate feasible and optimal long-horizon plans through explicit symbolic reasoning. To enhance the model's ability to decompose complex and ambiguous intentions, we introduce TGPO, a novel reinforcement learning algorithm that integrates external correction of intermediate reasoning trace into Group Relative Policy Optimization (GRPO). Experiments demonstrate that AHAT achieves significant performance gains over state-of-the-art prompting, planning, and learning methods, particularly in human-style household tasks characterized by brief instructions but requiring complex execution plans.">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="PAPER_TITLE - Research Preview">
+  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
+  <meta property="article:author" content="FIRST_AUTHOR_NAME">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="KEYWORD1">
+  <meta property="article:tag" content="KEYWORD2">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <!-- TODO: Same as paper title above -->
+  <meta name="twitter:title" content="PAPER_TITLE">
+  <!-- TODO: Same as description above -->
+  <meta name="twitter:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Same as social preview image above -->
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="PAPER_TITLE - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="PAPER_TITLE">
+  <meta name="citation_author" content="FIRST_AUTHOR_LAST, FIRST_AUTHOR_FIRST">
+  <meta name="citation_author" content="SECOND_AUTHOR_LAST, SECOND_AUTHOR_FIRST">
+  <meta name="citation_publication_date" content="2024">
+  <meta name="citation_conference_title" content="CONFERENCE_NAME">
+  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/paper.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <!-- TODO: Replace with your paper title and authors -->
+  <title>Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks - zhihong liu, yang li, renming huang, cewu lu, panpan cai | Academic Research</title>
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script defer src="static/js/interactive-demo.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "PAPER_TITLE",
+    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "FIRST_AUTHOR_NAME",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "INSTITUTION_NAME"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "SECOND_AUTHOR_NAME",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "INSTITUTION_NAME"
+        }
+      }
+    ],
+    "datePublished": "2024-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CONFERENCE_OR_JOURNAL_NAME"
+    },
+    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
+    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
+    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
+    "abstract": "FULL_ABSTRACT_TEXT_HERE",
+    "citation": "BIBTEX_CITATION_HERE",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "RESEARCH_AREA_1"
+      },
+      {
+        "@type": "Thing", 
+        "name": "RESEARCH_AREA_2"
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "INSTITUTION_OR_LAB_NAME",
+    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
+    "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
+    "sameAs": [
+      "https://twitter.com/YOUR_TWITTER_HANDLE",
+      "https://github.com/YOUR_GITHUB_USERNAME"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
+      <i class="fas fa-flask"></i>
+      More Works
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Works from Our Lab</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="works-list">
+        <a href="https://arxiv.org/abs/2507.21545" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Pretraining a Unified PDDL Domain from Real-World Demonstrations for Generalizable Robot Task Planning</h5>
+            <span class="work-venue">NIPS 2025</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://arxiv.org/abs/2506.02860" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Tru-POMDP: Task Planning Under Uncertainty via Tree of Hypotheses and Open-Ended POMDPs</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">NIPS 2025</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <!-- TODO: Replace with your paper title -->
+            <h1 class="title is-1 publication-title">Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with your paper authors and their personal links -->
+              <span class="author-block">
+                <a href="https://roboticsjtu.github.io/Group_website/author/zhihong-liu/" target="_blank">Zhihong Liu</a>,</span>
+                <span class="author-block">
+                  <a href="https://roboticsjtu.github.io/Group_website/author/yang-li/" target="_blank">Yang Li</a>,</span>
+                  <span class="author-block">
+                    <a href="https://roboticsjtu.github.io/Group_website/author/renming-huang/" target="_blank">Renming Huang</a>,</span>
+                  <span class="author-block">
+                    <a href="https://www.mvig.org/" target="_blank">Cewu Lu</a>,</span>
+                    <span class="author-block">
+                    <a href="https://roboticsjtu.github.io/Group_website/author/panpan-cai/" target="_blank">Panpan Cai</a>,</span>
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- TODO: Update with your arXiv paper ID -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/2602.12244" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                    <!-- TODO: Add your supplementary material PDF or remove this section -->
+                    <!-- <span class="link-block">
+                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span> -->
+
+                  <!-- TODO: Replace with your GitHub repository URL -->
+                  <span class="link-block">
+                    <a href="https://github.com/Sii-liuzhihong/AHAT" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Update with your arXiv paper ID -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2602.12244" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Start Banner-->
+<section class="hero teaser">
+  <div class="container has-text-centered">
+    <div class="hero-body">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <img src="static/images/ahat-banner-landscape.jpg" alt="AHAT image" loading="lazy" style="max-width: 100%; height: auto;"/>
+          <h2 class="subtitle has-text-centered">
+            We propose Any House Any Task (AHAT), a planner designed for long-horizon task planning in large-scale household environments under abstract and ambiguous human instructions. AHAT decomposes high-level intent into grounded PDDL subgoals, that improves plan feasibility and executability. More importantly, we introduce TGPO, a novel reinforcement learning algorithm that integrates external correction of intermediate reasoning traces into Group Relative Policy Optimization (GRPO). By training with TGPO, we obtain a significantly more powerful and reliable AHAT policy capable of structured decomposition and robust long-horizon planning.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Banner -->
+
+<!-- Youtube video -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h2 class="title is-3">Video Presentation</h2>
+      <div class="columns is-centered ">
+        <div class="column is-four-fifths">
+          
+          <div class="publication-video">
+            <!-- <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+              <video poster="" autoplay controls muted loop preload="metadata" style="width: 100%; border-radius: 8px;">
+                <source src="static/videos/ahat_accompanying_video.mp4" type="video/mp4">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End youtube video -->
+
+<!-- Interactive Demo Section - Part 1: Model Output Only -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Interactive Demo - Model Output</h2>
+      <p class="has-text-centered" style="margin-bottom: 2rem;">
+        Explore AHAT's planning outputs by selecting different scenes and instructions.
+      </p>
+
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <!-- Selection Controls -->
+          <div class="columns" style="margin-bottom: 1.5rem;">
+            <div class="column is-half">
+              <div class="field">
+                <label class="label">Scene Graph</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="scene-graph-select-1">
+                      <option value="">-- Select Scene Graph --</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="field">
+                <label class="label">Instruction</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="instruction-select-1" disabled>
+                      <option value="">-- Select Instruction --</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scene Graph Row -->
+          <div class="box" style="margin-bottom: 1.5rem;">
+            <h4 class="title is-5">Scene Graph</h4>
+            <div id="demo-scenegraph-container-1" class="demo-scenegraph-panel" style="max-height: 400px; overflow-y: auto;">
+              <p class="has-text-grey-light">Select a scene graph to view the building hierarchy.</p>
+            </div>
+          </div>
+
+          <!-- Model Output and Execution Plan - Side by Side -->
+          <div class="box">
+            <div class="columns">
+              <div class="column is-half">
+                <h4 class="title is-5">Model Output</h4>
+                <div id="demo-output-container-1" style="max-height: 300px; overflow-y: auto;">
+                  <p class="has-text-grey-light">Select a scene graph and instruction to see the output.</p>
+                </div>
+              </div>
+              <div class="column is-half">
+                <h4 class="title is-5">Execution Plan</h4>
+                <div id="demo-plan-container-1" style="max-height: 300px; overflow-y: auto;">
+                  <p class="has-text-grey-light">Plan steps will appear here.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Interactive Demo Section - Part 1 -->
+
+<!-- Interactive Demo Section - Part 2: With Video -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Interactive Demo - Execution Visualization</h2>
+      <p class="has-text-centered" style="margin-bottom: 2rem;">
+        Select an instruction to see the complete planning and execution with video demonstration.
+      </p>
+
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <!-- Instruction Selection Only -->
+          <div class="columns is-centered" style="margin-bottom: 1.5rem;">
+            <div class="column is-half">
+              <div class="field">
+                <label class="label">Instruction</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="instruction-select-2">
+                      <option value="">-- Select Instruction --</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Model Output and Execution Plan - Side by Side -->
+          <div class="box" style="margin-bottom: 1.5rem;">
+            <div class="columns">
+              <div class="column is-half">
+                <h4 class="title is-5">Model Output</h4>
+                <div id="demo-output-container-2" style="max-height: 300px; overflow-y: auto;">
+                  <p class="has-text-grey-light">Select an instruction to see the output.</p>
+                </div>
+              </div>
+              <div class="column is-half">
+                <h4 class="title is-5">Execution Plan</h4>
+                <div id="demo-plan-container-2" style="max-height: 300px; overflow-y: auto;">
+                  <p class="has-text-grey-light">Plan steps will appear here.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video - Below -->
+          <div class="box">
+            <h4 class="title is-5">Video Demonstration</h4>
+            <div id="demo-video-container-2">
+              <p class="has-text-grey-light has-text-centered">Video will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Interactive Demo Section - Part 2 -->
+
+<!-- Paper abstract -->
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <!-- TODO: Replace with your paper abstract -->
+          <p>
+            Open-world language-conditioned task planning is crucial for robots operating in large-scale household environments. While many recent works attempt to address this problem using Large Language Models (LLMs) via prompting or training, a key challenge remains: <em>scalability</em>. Performance often degrades rapidly with increasing environment size, plan length, instruction ambiguity, and constraint complexity. In this work, we propose Any House Any Task (AHAT), a household task planner optimized for long-horizon planning in large environments given abstract human instructions. At its core, AHAT utilizes an LLM trained to map task instructions and textual scene graphs into grounded subgoals defined in the Planning Domain Definition Language (PDDL). These subgoals are subsequently solved to generate feasible and optimal long-horizon plans through explicit symbolic reasoning. To enhance the model's ability to decompose complex and ambiguous intentions, we introduce TGPO, a novel reinforcement learning algorithm that integrates external correction of intermediate reasoning trace into Group Relative Policy Optimization (GRPO). Experiments demonstrate that AHAT achieves significant performance gains over state-of-the-art prompting, planning, and learning methods, particularly in human-style household tasks characterized by brief instructions but requiring complex execution plans.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+
+<!-- Key Components Section -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Key Components</h2>
+      
+      <!-- AHAT Planning Pipeline -->
+      <div class="content" style="margin-bottom: 3rem;">
+        <h3 class="title is-4">AHAT Planning Pipeline</h3>
+        <p class="has-text-justified">
+          Given a scene-task pair, AHAT predicts a sequence of sub-goals expressed in the Planning Domain Definition Language (PDDL), which are subsequently solved in sequence using off-the-shelf PDDL planners. To support structured reasoning, AHAT does not directly generate sub-goals in a single step. Instead, it first decomposes an abstract task into a sequence of natural-language sub-tasks, referred to as the <strong>decomposition trace</strong>, and then grounds each sub-task into a corresponding PDDL sub-goal.
+        </p>
+        <div class="columns is-centered" style="margin-top: 1.5rem;">
+          <div class="column is-four-fifths">
+            <video poster="" autoplay controls muted loop preload="metadata" style="width: 100%; border-radius: 8px;">
+              <source src="static/videos/ahat_planning_pipeline.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <!-- TGPO Algorithm -->
+      <div class="content">
+        <h3 class="title is-4">Trace-Guided Policy Optimization (TGPO)</h3>
+        <p class="has-text-justified">
+          TGPO is a novel reinforcement learning algorithm that enhances the model's ability to decompose complex and ambiguous intentions. Unlike standard GRPO, TGPO integrates <strong>external correction of intermediate reasoning traces</strong> into the optimization process.
+        </p>
+        <p class="has-text-justified">
+          In the first pass, AHAT performs standard inference to produce a group of N candidate outputs, each consisting of a decomposition trace and a set of sub-goals. These outputs are evaluated using a composite reward function with two criteria: (1) <strong>feasibility</strong>, which checks whether the sub-goals can be successfully solved by the PDDL planner, and (2) <strong>task completion</strong>, which assesses whether the resulting action sequence fulfills all user intentions, verified by an auxiliary language model (the reviewer).
+        </p>
+        <p class="has-text-justified">
+          In the second pass, we perform trace improvement and trace-guided sub-goal regeneration. Only failed outputs are selected, and an external language model (the <strong>trace improver</strong>) revises their decomposition traces based on feedback from the PDDL planner and the reviewer. A second inference of AHAT is then conducted, where the revised trace is injected through <strong>token-level constrained sampling</strong>: tokens corresponding to the revised decomposition trace are forced during policy rollout, while sub-goals are generated autoregressively by the policy. Rewards are re-evaluated for the resulting plans, which are added back into the candidate group to compute group-relative rewards and derive robust policy gradients.
+        </p>
+        <div class="columns is-centered" style="margin-top: 1.5rem;">
+          <div class="column is-four-fifths">
+            <video poster="" autoplay controls muted loop preload="metadata" style="width: 100%; border-radius: 8px;">
+              <source src="static/videos/TGPO.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Key Components Section -->
+
+
+
+
+<!-- Experimental Results -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Experimental Results</h2>
+      
+      <!-- Main Results Table -->
+      <div class="content">
+        <h3 class="title is-4">Main Results</h3>
+        <p class="has-text-justified">
+          We evaluate AHAT on both our collected benchmarks and public benchmarks, comparing against state-of-the-art LLMs and prompting-based planners. Our approach demonstrates significant improvements across all metrics.
+        </p>
+        <!-- Methods Description -->
+          <div class="content" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+            
+            <h4 class="title is-5">Evaluation Benchmarks</h4>
+            <ul>
+              <li><strong>AHAT Benchmark:</strong> Our newly constructed benchmark featuring large-scale household environments with abstract human instructions, designed to evaluate long-horizon planning capabilities under varying complexity.</li>
+              <li><strong>Human Benchmark:</strong> A benchmark composed of human-authored tasks collected via a web-based platform, designed to evaluate performance on real-world instructions beyond the synthesized corpus.</li>
+              <li><strong>BEHAVIOR:</strong> A public benchmark for household task planning that includes diverse manipulation tasks in realistic simulated environments.</li>
+              <li><strong>Partnr:</strong> A public benchmark focusing on object rearrangement tasks in household scenes, evaluating spatial reasoning and multi-step planning.</li>
+            </ul>
+          </div>
+        
+        <!-- Figures 1 & 2 - Side by Side -->
+        <div class="columns is-centered">
+          <div class="column is-6">
+            <figure class="image">
+              <img src="static/images/ahat_levels.png" alt="Results on AHAT Benchmark and Human Benchmark" loading="lazy" style="max-width: 100%; height: auto;"/>
+              <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
+                Figure 1: Performance comparison on AHAT Benchmark under varying complexity.
+              </figcaption>
+            </figure>
+          </div>
+          <div class="column is-6">
+            <figure class="image">
+              <img src="static/images/methods_by_benchmark.png" alt="Results on public benchmarks" loading="lazy" style="max-width: 100%; height: auto;"/>
+              <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
+                Figure 2: Performance comparison across benchmarks.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ablation Study -->
+      <div class="content" style="margin-top: 2rem;">
+        <h3 class="title is-4">Ablation Study</h3>
+        <p class="has-text-justified">
+          We conduct two ablation studies to evaluate the impact of <strong>subgoal-based planning</strong> and <strong>trace-guided policy optimization (TGPO)</strong>. Replacing subgoal generation with end-to-end action sequence prediction (E2E-TGPO) leads to substantial performance drops, especially on complex and abstract tasks, highlighting the importance of structured subgoal decomposition. In the second study, we replace TGPO with SFT, GRPO, and Reinforce++. While reinforcement learning methods outperform pure SFT, AHAT-TGPO achieves the best results, particularly on abstract tasks. These findings confirm that integrating trace revision through TGPO is critical for solving complex, high-level instructions.
+        </p>
+
+        
+        
+        <!-- Figures 3 & 4 - Side by Side -->
+        <div class="columns is-centered">
+          <div class="column is-6">
+            <figure class="image">
+              <img src="static/images/ahat_ablation.png" alt="Ablation study results" loading="lazy" style="max-width: 100%; height: auto;"/>
+              <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
+                Table 3: Ablation study results showing the contribution of AHAT.
+              </figcaption>
+            </figure>
+          </div>
+          <div class="column is-6">
+            <figure class="image">
+              <img src="static/images/tgpo_ablation.png" alt="Ablation study results" loading="lazy" style="max-width: 100%; height: auto;"/>
+              <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
+                Table 4: Ablation study results showing the contribution of TGPO.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+      
+
+      <!-- Scalability Analysis -->
+      <div class="content" style="margin-top: 2rem;">
+        <h3 class="title is-4">Scalability Analysis</h3>
+        <p class="has-text-justified">
+          We systematically evaluate scalability across four dimensions: environment size, plan length, instruction abstraction, and task constraint complexity. As each dimension increases, we observe that AHAT maintains relatively stable performance, with only marginal degradation. In contrast, baseline methods exhibit significant performance drops as scalability increases. These results demonstrate AHAT’s robustness and effectiveness in handling large-scale environments, long-horizon planning, highly abstract instructions, and complex constraints.
+        </p>
+        
+        <!-- TODO: Replace with your scalability analysis images -->
+        <div class="columns is-centered">
+          <div class="column">
+            <figure class="image">
+              <img src="static/images/scalability_results.png" alt="Scalability analysis" loading="lazy" style="max-width: 70%; height: auto;"/>
+              <figcaption class="has-text-centered" style="margin-top: 0.5rem; font-style: italic;">
+                Figure5: Scalability analysis across different environment sizes, plan length, task abstraction and constraint complexity.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End experimental results -->
+
+
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@misc{liu2026housetaskscalablelonghorizon,
+      title={Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks}, 
+      author={Zhihong Liu and Yang Li and Rengming Huang and Cewu Lu and Panpan Cai},
+      year={2026},
+      eprint={2602.12244},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2602.12244}, 
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
