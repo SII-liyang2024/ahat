@@ -319,14 +319,16 @@ function renderSceneGraphPanel1(sceneGraph, plan) {
   container.appendChild(btnDiv);
 
   // Determine implicit involved nodes based on the execution plan
-  const planText = (Array.isArray(plan) ? plan.join(" ") : (plan || "")).toLowerCase();
+  const planText = (
+    Array.isArray(plan) ? plan.join(" ") : plan || ""
+  ).toLowerCase();
   const involvedRooms = new Set();
   const involvedFurns = new Set();
 
   if (planText) {
     // Check which objects/furnitures are mentioned in the plan
     // If an object is mentioned, expand its furniture and room.
-    objects.forEach(o => {
+    objects.forEach((o) => {
       if (planText.includes((o.name || "").toLowerCase())) {
         // find its furniture
         for (const [fName, oList] of furnitureToObjects.entries()) {
@@ -346,7 +348,7 @@ function renderSceneGraphPanel1(sceneGraph, plan) {
     });
 
     // If furniture is mentioned, expand its room.
-    furnitures.forEach(f => {
+    furnitures.forEach((f) => {
       if (planText.includes((f.name || "").toLowerCase())) {
         involvedFurns.add(f.name);
         for (const [roomName, fList] of roomToFurnitures.entries()) {
@@ -359,7 +361,7 @@ function renderSceneGraphPanel1(sceneGraph, plan) {
     });
 
     // If room is directly mentioned, expand it.
-    rooms.forEach(r => {
+    rooms.forEach((r) => {
       if (planText.includes((r.name || "").toLowerCase())) {
         involvedRooms.add(r.name);
       }
