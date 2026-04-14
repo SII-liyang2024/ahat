@@ -128,8 +128,12 @@ function onInstructionChange1() {
     return;
   }
 
-  const dataItem = demoData[sceneGraphIndex].data_items[instructionIndex];
+  const sceneGraphData = demoData[sceneGraphIndex];
+  const dataItem = sceneGraphData.data_items[instructionIndex];
   displayDemoOutput1(dataItem);
+
+  // Update scene graph panel with selected plan to expand relevant nodes
+  renderSceneGraphPanel1(sceneGraphData.scene_graph, dataItem.plan);
 }
 
 // Display Demo 1 output (no video)
@@ -182,7 +186,7 @@ function clearSceneGraphPanel1() {
     '<p class="has-text-grey-light">Select a scene graph to view rooms and containment.</p>';
 }
 
-function renderSceneGraphPanel1(sceneGraph) {
+function renderSceneGraphPanel1(sceneGraph, plan) {
   const container = document.getElementById("demo-scenegraph-container-1");
   if (!container) return;
 
@@ -314,6 +318,54 @@ function renderSceneGraphPanel1(sceneGraph) {
   btnDiv.appendChild(btnExpandAll);
   container.appendChild(btnDiv);
 
+  // Determine implicit involved nodes based on the execution plan
+  const planText = (Array.isArray(plan) ? plan.join(" ") : (plan || "")).toLowerCase();
+  const involvedRooms = new Set();
+  const involvedFurns = new Set();
+
+  if (planText) {
+    // Check which objects/furnitures are mentioned in the plan
+    // If an object is mentioned, expand its furniture and room.
+    objects.forEach(o => {
+      if (planText.includes((o.name || "").toLowerCase())) {
+        // find its furniture
+        for (const [fName, oList] of furnitureToObjects.entries()) {
+          if (oList.includes(o.name)) {
+            involvedFurns.add(fName);
+            // finding room for this furniture
+            for (const [roomName, fList] of roomToFurnitures.entries()) {
+              if (fList.includes(fName)) {
+                involvedRooms.add(roomName);
+                break;
+              }
+            }
+            break;
+          }
+        }
+      }
+    });
+
+    // If furniture is mentioned, expand its room.
+    furnitures.forEach(f => {
+      if (planText.includes((f.name || "").toLowerCase())) {
+        involvedFurns.add(f.name);
+        for (const [roomName, fList] of roomToFurnitures.entries()) {
+          if (fList.includes(f.name)) {
+            involvedRooms.add(roomName);
+            break;
+          }
+        }
+      }
+    });
+
+    // If room is directly mentioned, expand it.
+    rooms.forEach(r => {
+      if (planText.includes((r.name || "").toLowerCase())) {
+        involvedRooms.add(r.name);
+      }
+    });
+  }
+
   // Set up ECharts
   const chartContainer = document.createElement("div");
   chartContainer.style.width = "100%";
@@ -335,7 +387,7 @@ function renderSceneGraphPanel1(sceneGraph) {
     const roomNode = {
       name: "🚪 " + roomName,
       itemStyle: { color: "#00d1b2" },
-      collapsed: true, // Expected initial state
+      collapsed: !involvedRooms.has(roomName), // Auto-expand if involved in plan
       children: [],
     };
 
@@ -347,7 +399,7 @@ function renderSceneGraphPanel1(sceneGraph) {
       const furnNode = {
         name: "🪑 " + f.name,
         itemStyle: { color: "#ffdd57" },
-        collapsed: true, // Expected initial state
+        collapsed: !involvedFurns.has(f.name), // Auto-expand if involved in plan
         children: [],
       };
 
